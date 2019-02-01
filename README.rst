@@ -23,7 +23,7 @@ Make sure Cookiecutter_ is installed::
 
 Now you can generate a project::
 
-    cookiecutter https://bitbucket.org/ludditelabs/cookiecutter-ludditelabs-py
+    cookiecutter git+ssh://git@bitbucket.org/ludditelabs/cookiecutter-ludditelabs-py.git
 
 It will ask you few questions and then generate project in the current directory
 with name of your package name.
