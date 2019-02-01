@@ -1,0 +1,12 @@
+image: ludditelabs/pyenv-multipy:20190107
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - pip
+        script:
+          - pyenv global 3.6.6 3.5.6 3.7.0
+          - pip install -U pip
+          - pip install -r requirements/test.txt
+          - tox

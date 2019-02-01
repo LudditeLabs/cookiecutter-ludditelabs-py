@@ -1,0 +1,13 @@
+{
+  "project_title": "My Project",
+  "project_short_description": "{{ cookiecutter.project_title }} contains all the boilerplate you need to create a python package.",
+  "project_url": "",
+  "package_name": "{{ cookiecutter.project_title.lower().replace(' ', '_').replace('-', '_') }}",
+  "author": "Luddite Labs",
+  "email": "dev@ludditelabs.io",
+  "version": "0.0.1",
+  "license": ["No license", "Apache Software License 2.0", "MIT license", "BSD license"],
+  "use_cli": "y",
+  "sphinx_use_apidoc": "y",
+  "use_bitbucket_pipeline": "y"
+}
