@@ -48,6 +48,12 @@ class PathsRemover:
 if __name__ == '__main__':
     paths = PathsRemover()
 
+    if '{{ cookiecutter.use_bitbucket_pipelines }}' != 'y':
+        paths.add_from_root('bitbucket-pipelines.yml')
+
+    if '{{ cookiecutter.use_travis }}' != 'y':
+        paths.add_from_root('.travis.yml')
+
     if '{{ cookiecutter.use_cli }}' != 'y':
         paths.add_from_package('cli.py')
         paths.add_from_package('__main__.py')
@@ -57,9 +63,6 @@ if __name__ == '__main__':
 
     if '{{ cookiecutter.use_appconfig }}' != 'y':
         paths.add_from_package('utils', 'config.py')
-
-    if '{{ cookiecutter.use_bitbucket_pipeline }}' != 'y':
-        paths.add_from_root('bitbucket-pipelines.yml')
 
     if '{{ cookiecutter.license }}' == 'No license':
         paths.add_from_root('LICENSE')

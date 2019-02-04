@@ -76,12 +76,21 @@ def test_run_docs(cookies):
         assert run_command('make html', str(result.project.join('docs'))) == 0
 
 
-# Test: use_bitbucket_pipeline flag (create or not bitbucket-pipelines.yml).
+# Test: use_bitbucket_pipelines flag (create or not bitbucket-pipelines.yml).
 @pytest.mark.parametrize('use', ['y', 'n'])
-def test_use_bitbucket_pipeline(cookies, use):
-    ctx = dict(use_bitbucket_pipeline=use)
+def test_use_bitbucket_pipelines(cookies, use):
+    ctx = dict(use_bitbucket_pipelines=use)
     with project(cookies, extra_context=ctx) as result:
         path = result.project.join('bitbucket-pipelines.yml')
+        assert path.exists() is (use == 'y')
+
+
+# Test: use_travis flag (create or not .travis.yml).
+@pytest.mark.parametrize('use', ['y', 'n'])
+def test_use_travis(cookies, use):
+    ctx = dict(use_travis=use)
+    with project(cookies, extra_context=ctx) as result:
+        path = result.project.join('.travis.yml')
         assert path.exists() is (use == 'y')
 
 

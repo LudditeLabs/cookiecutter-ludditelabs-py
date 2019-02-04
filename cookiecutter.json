@@ -7,10 +7,11 @@
   "email": "dev@ludditelabs.io",
   "version": "0.0.1",
   "license": ["No license", "Apache Software License 2.0", "MIT license", "BSD license"],
+  "use_bitbucket_pipelines": "n",
+  "use_travis": "n",
   "use_cli": "y",
   "use_logging": "y",
   "use_appconfig": "n",
   "use_appconfig_s3": "n",
-  "sphinx_use_apidoc": "y",
-  "use_bitbucket_pipeline": "y"
+  "sphinx_use_apidoc": "y"
 }
