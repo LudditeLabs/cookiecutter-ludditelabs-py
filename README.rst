@@ -2,6 +2,9 @@
 Python project template
 =======================
 
+.. image:: https://travis-ci.org/LudditeLabs/cookiecutter-ludditelabs-py.svg?branch=master
+   :target: https://travis-ci.org/LudditeLabs/cookiecutter-ludditelabs-py
+
 Cookiecutter_ template for a python package.
 
 Features
