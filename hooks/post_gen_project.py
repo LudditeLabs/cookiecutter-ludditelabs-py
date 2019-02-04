@@ -38,8 +38,10 @@ class PathsRemover:
     def remove_empty_package(self, *args):
         pkg = Path(package_dir, *args)
         files = list(pkg.iterdir())
+        init_file = Path(pkg, '__init__.py')
 
-        if not files or files == [pkg.joinpath(*args)]:
+        if not files or files == [init_file]:
+            init_file.unlink()
             pkg.rmdir()
 
 
