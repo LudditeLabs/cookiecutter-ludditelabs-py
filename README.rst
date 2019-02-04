@@ -13,6 +13,7 @@ Features
 * Bitbucket pipeline configuration support.
 * Project version management with bumpversion_.
 * Command line interface using click_.
+* Application configurations using config-source_.
 
 Usage
 -----
@@ -23,7 +24,7 @@ Make sure Cookiecutter_ is installed::
 
 Now you can generate a project::
 
-    cookiecutter git+ssh://git@bitbucket.org/ludditelabs/cookiecutter-ludditelabs-py.git
+    cookiecutter https://github.com/LudditeLabs/cookiecutter-ludditelabs-py
 
 It will ask you few questions and then generate project in the current directory
 with name of your package name.
@@ -71,6 +72,10 @@ Field                           Description
 
                                 Used in ``setup.py`` and ``LICENSE``.
 
+``use_bitbucket_pipelines``     ``flag``: setup ``bitbucket-pipelines.yml``.
+
+``use_travis``                  ``flag``: setup ``.travis.yml``.
+
 ``use_cli``                     ``flag``: create or not CLI.
 
                                 Used in ``setup.py``.
@@ -94,8 +99,6 @@ Field                           Description
 
 ``sphinx_use_apidoc``           ``flag``: configure``sphinx.ext.apidoc`` to
                                 generate API docs.
-
-``use_bitbucket_pipeline``      ``flag``: create ``bitbucket-pipelines.yml``.
 =============================== ================================================
 
 What to do next
@@ -123,3 +126,4 @@ You may want to tune some parameters after the project is generated.
 .. _bumpversion: https://github.com/peritus/bumpversion
 .. _click: https://click.palletsprojects.com/
 .. _flake8: http://flake8.pycqa.org/en/latest/
+.. _config-source:: https://github.com/LudditeLabs/config-source
