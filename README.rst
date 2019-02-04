@@ -112,7 +112,8 @@ You may want to tune some parameters after the project is generated.
 * **Requirements**: Update packages versions in the ``requirements/`` directory
   and ``setup.py``.
 
-* **Bitbucket pipeline**: Update or change docker image and ``script`` steps.
+* **Bitbucket pipeline**/**travis**: Update or change docker image and
+  ``script`` steps.
 
 * **Tox**: Update or change python versions.
 
