@@ -1,5 +1,5 @@
 import os.path as op
-from configsource import DictConfig
+from config_source import DictConfig
 
 
 def create_config(*args, env_prefix='{{ cookiecutter.package_name.upper() }}',

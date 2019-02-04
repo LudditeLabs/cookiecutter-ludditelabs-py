@@ -1,7 +1,7 @@
 {% if cookiecutter.use_cli == 'y' %}click==7.0{% endif %}
 {%- if cookiecutter.use_appconfig == 'y' %}
-git+ssh://git@bitbucket.org/ludditelabs/configsource.git@d316cc7
+config-source==0.0.5
 {%- if cookiecutter.use_appconfig_s3 == 'y' %}
-git+ssh://git@bitbucket.org/ludditelabs/configsource_s3.git@95b0ffe
+config-source-s3==0.0.3
 {%- endif %}
 {% endif %}

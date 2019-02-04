@@ -36,9 +36,9 @@ setup(
     install_requires=[
         {% if cookiecutter.use_cli == 'y' %}'click>=6.0',{% endif %}
         {%- if cookiecutter.use_appconfig == 'y' %}
-        'configsource',
+        'config-source',
         {%- if cookiecutter.use_appconfig_s3 == 'y' %}
-        'configsource_s3',
+        'config-source-s3',
         {%- endif %}
         {%- endif %}
     ],

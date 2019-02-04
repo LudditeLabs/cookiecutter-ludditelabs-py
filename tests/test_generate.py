@@ -136,13 +136,13 @@ def test_use_appconfig(cookies, use):
 
     with project(cookies, extra_context=ctx) as result:
         path = result.project.join('setup.py')
-        assert ("'configsource'" in path.read()) is state
+        assert ("'config-source'" in path.read()) is state
 
         path = result.project.join('src', 'mypkg', 'utils', 'config.py')
         assert path.exists() is state
 
         path = result.project.join('requirements', 'base.txt')
-        assert ('configsource.git' in path.read()) is state
+        assert ('config-source=' in path.read()) is state
 
 
 # Test: use_appconfig_s3 flag.
@@ -158,10 +158,10 @@ def test_use_appconfig_s3(cookies, use, use_s3):
 
     with project(cookies, extra_context=ctx) as result:
         path = result.project.join('setup.py')
-        assert ("'configsource_s3'" in path.read()) is state_s3
+        assert ("'config-source-s3'" in path.read()) is state_s3
 
         path = result.project.join('requirements', 'base.txt')
-        assert ('configsource_s3.git' in path.read()) is state_s3
+        assert ('config-source-s3=' in path.read()) is state_s3
 
 
 # Test: LICENSE file generating.
