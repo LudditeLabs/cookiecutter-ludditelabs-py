@@ -117,6 +117,17 @@ def test_use_cli(cookies, use):
         assert path.exists() is state
 
 
+# Test: use_logging flag.
+@pytest.mark.parametrize('use', ['y', 'n'])
+def test_use_logging(cookies, use):
+    ctx = dict(use_logging=use, package_name='mypkg')
+    state = use == 'y'
+
+    with project(cookies, extra_context=ctx) as result:
+        path = result.project.join('src', 'mypkg', 'utils', 'logging.py')
+        assert path.exists() is state
+
+
 # Test: LICENSE file generating.
 class TestLicense:
     # Test: is file exists after generating.

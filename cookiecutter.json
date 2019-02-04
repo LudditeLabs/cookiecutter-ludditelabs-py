@@ -8,6 +8,7 @@
   "version": "0.0.1",
   "license": ["No license", "Apache Software License 2.0", "MIT license", "BSD license"],
   "use_cli": "y",
+  "use_logging": "n",
   "sphinx_use_apidoc": "y",
   "use_bitbucket_pipeline": "y"
 }

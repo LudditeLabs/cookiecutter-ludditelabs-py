@@ -35,6 +35,13 @@ class PathsRemover:
             else:
                 path.unlink()
 
+    def remove_empty_package(self, *args):
+        pkg = Path(package_dir, *args)
+        files = list(pkg.iterdir())
+
+        if not files or files == [pkg.joinpath(*args)]:
+            pkg.rmdir()
+
 
 if __name__ == '__main__':
     paths = PathsRemover()
@@ -43,6 +50,9 @@ if __name__ == '__main__':
         paths.add_from_package('cli.py')
         paths.add_from_package('__main__.py')
 
+    if '{{ cookiecutter.use_logging }}' != 'y':
+        paths.add_from_package('utils', 'logging.py')
+
     if '{{ cookiecutter.use_bitbucket_pipeline }}' != 'y':
         paths.add_from_root('bitbucket-pipelines.yml')
 
@@ -50,3 +60,4 @@ if __name__ == '__main__':
         paths.add_from_root('LICENSE')
 
     paths.remove()
+    paths.remove_empty_package('utils')

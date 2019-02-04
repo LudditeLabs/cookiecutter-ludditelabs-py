@@ -75,6 +75,10 @@ Field                           Description
 
                                 Used in ``setup.py``.
 
+``use_logging``                 ``flag``: add logging support.
+
+                                Adds ``utils/logging.py`` with logging utils.
+
 ``sphinx_use_apidoc``           ``flag``: configure``sphinx.ext.apidoc`` to
                                 generate API docs.
 
