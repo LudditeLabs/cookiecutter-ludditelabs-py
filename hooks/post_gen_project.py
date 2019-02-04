@@ -55,6 +55,9 @@ if __name__ == '__main__':
     if '{{ cookiecutter.use_logging }}' != 'y':
         paths.add_from_package('utils', 'logging.py')
 
+    if '{{ cookiecutter.use_appconfig }}' != 'y':
+        paths.add_from_package('utils', 'config.py')
+
     if '{{ cookiecutter.use_bitbucket_pipeline }}' != 'y':
         paths.add_from_root('bitbucket-pipelines.yml')
 

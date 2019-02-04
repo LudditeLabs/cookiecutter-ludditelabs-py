@@ -79,6 +79,19 @@ Field                           Description
 
                                 Adds ``utils/logging.py`` with logging utils.
 
+``use_appconfig``               ``flag``: add application configuration loading
+                                with ``configsource`` package.
+
+                                Used in ``setup.py``, ``requirements/base.txt``.
+
+                                Adds ``utils/config.py``.
+
+``use_appconfig_s3``            ``flag``: add ``configsource_s3`` dependency to
+                                ``requirements/base.txt`` to support remote
+                                configurations loading from AWS S3 buckets.
+
+                                Used in ``setup.py``, ``requirements/base.txt``.
+
 ``sphinx_use_apidoc``           ``flag``: configure``sphinx.ext.apidoc`` to
                                 generate API docs.
 

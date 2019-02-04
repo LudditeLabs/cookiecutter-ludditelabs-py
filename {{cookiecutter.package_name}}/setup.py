@@ -33,7 +33,15 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     include_package_data=True,
-    install_requires=[{% if cookiecutter.use_cli == 'y' %}'click>=6.0'{% endif %}],
+    install_requires=[
+        {% if cookiecutter.use_cli == 'y' %}'click>=6.0',{% endif %}
+        {%- if cookiecutter.use_appconfig == 'y' %}
+        'configsource',
+        {%- if cookiecutter.use_appconfig_s3 == 'y' %}
+        'configsource_s3',
+        {%- endif %}
+        {%- endif %}
+    ],
 {%- if cookiecutter.use_cli == 'y' %}
     entry_points={
         'console_scripts': ['{{ cookiecutter.package_name }}={{ cookiecutter.package_name }}.__main__:cli']
