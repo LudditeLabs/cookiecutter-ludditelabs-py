@@ -63,6 +63,7 @@ if __name__ == '__main__':
 
     if '{{ cookiecutter.use_appconfig }}' != 'y':
         paths.add_from_package('utils', 'config.py')
+        paths.add_from_package('appconfig.py')
 
     if '{{ cookiecutter.license }}' == 'No license':
         paths.add_from_root('LICENSE')

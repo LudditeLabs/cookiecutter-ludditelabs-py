@@ -9,6 +9,7 @@ from cookiecutter.utils import rmtree
 # TODO: add tests for project_title, project_short_description, package_name,
 #       author, email, version.
 
+# TODO: test CLI running.
 
 # -- Utils --------------------------------------------------------------------
 
@@ -147,7 +148,16 @@ def test_use_appconfig(cookies, use):
         path = result.project.join('setup.py')
         assert ("'config-source'" in path.read()) is state
 
+        path = result.project.join('src', 'mypkg', 'cli.py')
+        src = path.read()
+        assert ("from mypkg import appconfig" in src) is state
+        assert ("ctx.meta['config'] = appconfig.load(config)" in src) is state
+        assert ("def cli(ctx, config)" in src) is state
+
         path = result.project.join('src', 'mypkg', 'utils', 'config.py')
+        assert path.exists() is state
+
+        path = result.project.join('src', 'mypkg', 'appconfig.py')
         assert path.exists() is state
 
         path = result.project.join('requirements', 'base.txt')

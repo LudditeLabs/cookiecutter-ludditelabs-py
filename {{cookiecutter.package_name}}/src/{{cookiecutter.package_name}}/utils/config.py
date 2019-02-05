@@ -1,24 +1,14 @@
-import os.path as op
-from config_source import DictConfig
+from config_source import DictConfig, DictConfigLoader
 
 
-# Define UPPER_CASE attributes.
-class DefaultAppConfig:
-    """Default application's configuration."""
-
-    #: Example config.
-    EXAMPLE_CONF = 'hello'
-
-
-def create_config(*args, env_prefix='{{ cookiecutter.package_name.upper() }}',
-                  default_config='~/.{{ cookiecutter.package_name.replace("_", "-") }}-cfg.py'):
+def create_config(source, env_prefix=None, defaults=None):
     """Create app configuration.
 
     Configurations precedence:
 
-    * Default configuration from the :class:`DefaultAppConfig`.
+    * ``defaults``.
     * S3 configuration file.
-    * Local config files ``config_files``.
+    * ``source``.
     * Environment variables ``<env_prefix>_*``.
 
     Add the following fields to local config to load S3 config::
@@ -36,10 +26,11 @@ def create_config(*args, env_prefix='{{ cookiecutter.package_name.upper() }}',
         )
 
     Args:
-        args: Configuration filenames to load.
+        source: Single configuration source or list of them (filenames,
+            dictionaries or objects or classes).
         env_prefix: Environment variables prefix.
-        default_config: Default configuration file. It loaded before the
-            ``config_files``.
+        defaults: Single configuration source or list of them with
+            default configurations. Loaded before the ``source``.
 
     Returns:
         :class:`DictConfig` instance with loaded configuration.
@@ -50,17 +41,26 @@ def create_config(*args, env_prefix='{{ cookiecutter.package_name.upper() }}',
     See Also:
         https://docs.aws.amazon.com/cli/latest/reference/s3/
     """
-    config_files = [default_config]
-    config_files.extend(args)
+    if isinstance(defaults, (tuple, list)):
+        config_sources = defaults[:]
+    elif defaults is not None:
+        config_sources = [defaults]
+    else:
+        config_sources = []
 
-    config = DictConfig()
-    config.load_from('object', DefaultAppConfig)
+    if isinstance(source, (tuple, list)):
+        config_sources.extend(source)
+    elif source:
+        config_sources.append(source)
 
-    for filename in config_files:
-        config.load_from('pyfile', op.abspath(op.expanduser(filename)),
-                         silent=True)
+    config = DictConfig(defaults={'pyfile': {'silent': True}})
+    loader = DictConfigLoader(config)
 
-    config.load_from('env', prefix=env_prefix)
+    for src in config_sources:
+        loader.load(src)
+
+    if env_prefix is not None:
+        config.load_from('env', prefix=env_prefix)
 
     # If S3 field is set then load S3 config
     # and merge already loaded files/env config into it.
