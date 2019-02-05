@@ -2,6 +2,14 @@ import os.path as op
 from config_source import DictConfig
 
 
+# Define UPPER_CASE attributes.
+class AppConfig:
+    """Default application's configuration."""
+
+    #: Example config.
+    EXAMPLE_CONF = 'hello'
+
+
 def create_config(*args, env_prefix='{{ cookiecutter.package_name.upper() }}',
                   default_config='~/.{{ cookiecutter.package_name.replace("_", "-") }}-cfg.py'):
     """Create app configuration.
@@ -64,11 +72,3 @@ def create_config(*args, env_prefix='{{ cookiecutter.package_name.upper() }}',
         config = s3config
 
     return config
-
-
-# Define UPPER_CASE attributes.
-class AppConfig:
-    """Default application's configuration."""
-
-    #: Example config.
-    EXAMPLE_CONF = 'hello'
