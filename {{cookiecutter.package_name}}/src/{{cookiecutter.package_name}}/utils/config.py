@@ -8,6 +8,7 @@ def create_config(*args, env_prefix='{{ cookiecutter.package_name.upper() }}',
 
     Configurations precedence:
 
+    * Default configuration from the :class:`AppConfig`.
     * S3 configuration file.
     * Local config files ``config_files``.
     * Environment variables ``<env_prefix>_*``.
@@ -45,6 +46,8 @@ def create_config(*args, env_prefix='{{ cookiecutter.package_name.upper() }}',
     config_files.extend(args)
 
     config = DictConfig()
+    config.load_from('object', AppConfig)
+
     for filename in config_files:
         config.load_from('pyfile', op.abspath(op.expanduser(filename)),
                          silent=True)
@@ -61,3 +64,11 @@ def create_config(*args, env_prefix='{{ cookiecutter.package_name.upper() }}',
         config = s3config
 
     return config
+
+
+# Define UPPER_CASE attributes.
+class AppConfig:
+    """Default application's configuration."""
+
+    #: Example config.
+    EXAMPLE_CONF = 'hello'
