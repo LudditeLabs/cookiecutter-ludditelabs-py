@@ -3,7 +3,7 @@ from config_source import DictConfig
 
 
 # Define UPPER_CASE attributes.
-class AppConfig:
+class DefaultAppConfig:
     """Default application's configuration."""
 
     #: Example config.
@@ -16,7 +16,7 @@ def create_config(*args, env_prefix='{{ cookiecutter.package_name.upper() }}',
 
     Configurations precedence:
 
-    * Default configuration from the :class:`AppConfig`.
+    * Default configuration from the :class:`DefaultAppConfig`.
     * S3 configuration file.
     * Local config files ``config_files``.
     * Environment variables ``<env_prefix>_*``.
@@ -54,7 +54,7 @@ def create_config(*args, env_prefix='{{ cookiecutter.package_name.upper() }}',
     config_files.extend(args)
 
     config = DictConfig()
-    config.load_from('object', AppConfig)
+    config.load_from('object', DefaultAppConfig)
 
     for filename in config_files:
         config.load_from('pyfile', op.abspath(op.expanduser(filename)),
