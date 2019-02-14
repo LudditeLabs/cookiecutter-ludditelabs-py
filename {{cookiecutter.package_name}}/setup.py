@@ -14,11 +14,13 @@ def get_version(fname='src/{{ cookiecutter.package_name }}/__init__.py'):
 def read(*parts, **kwargs):
     return open(op.join(op.dirname(__file__), *parts)).read()
 
+
 {%- set license_classifiers = {
     'MIT license': 'License :: OSI Approved :: MIT License',
     'BSD license': 'License :: OSI Approved :: BSD License',
     'Apache Software License 2.0': 'License :: OSI Approved :: Apache Software License',
 } %}
+
 
 setup(
     name='{{ cookiecutter.package_name }}',
@@ -34,7 +36,9 @@ setup(
     package_dir={'': 'src'},
     include_package_data=True,
     install_requires=[
-        {% if cookiecutter.use_cli == 'y' %}'click>=6.0',{% endif %}
+        {%- if cookiecutter.use_cli == 'y' %}
+        'click>=6.0',
+        {%- endif %}
         {%- if cookiecutter.use_appconfig == 'y' %}
         'config-source',
         {%- if cookiecutter.use_appconfig_s3 == 'y' %}
