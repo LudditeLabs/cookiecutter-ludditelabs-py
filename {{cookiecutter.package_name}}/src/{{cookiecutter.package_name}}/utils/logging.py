@@ -34,7 +34,7 @@ def setup_app_logger(ctx):
     """
     setup_root_logger(ctx)
 
-    logger = logging.getLogger('patentml')
+    logger = logging.getLogger('{{ cookiecutter.package_name }}')
     logger.setLevel(logging.DEBUG if ctx.meta.get('verbose') else logging.INFO)
     ctx.meta['logger'] = logger
 
