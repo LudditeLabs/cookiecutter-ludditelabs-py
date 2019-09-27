@@ -76,5 +76,5 @@ class LoggerPrefixAdapter(logging.LoggerAdapter):
     def process(self, msg, kwargs):
         if self.extra is not None:
             kwargs['extra'] = self.extra
-        msg = ''.join(self.prefix + x for x in msg.splitlines(True))
+        msg = ''.join(self.prefix + x for x in str(msg).splitlines(True))
         return msg, kwargs
