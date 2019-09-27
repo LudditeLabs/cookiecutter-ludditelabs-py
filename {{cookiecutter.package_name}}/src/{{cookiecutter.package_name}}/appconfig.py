@@ -22,4 +22,4 @@ def load(*args):
         DefaultAppConfig,
         '~/.{{ cookiecutter.package_name.replace("_", "-") }}-cfg.py'
     ]
-    return create_config(args, env_prefix='{{ cookiecutter.package_name.upper() }}', defaults=defaults)
+    return create_config(args, env_prefix='{{ cookiecutter.package_name.upper() }}_', defaults=defaults)
