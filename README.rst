@@ -83,6 +83,8 @@ Field                           Description
 
                                 Used in ``setup.py``.
 
+``use_conda``                   ``flag``: use conda environment.
+
 ``sphinx_use_apidoc``           ``flag``: configure``sphinx.ext.apidoc`` to
                                 generate API docs.
 =============================== ================================================
