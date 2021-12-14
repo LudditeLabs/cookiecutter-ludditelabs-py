@@ -10,7 +10,7 @@ Cookiecutter_ template for a python package.
 Features
 --------
 
-* Python `3.9`.
+* Python ``3.9``.
 * Testing with pytest_.
 * Sphinx_ documentation with ReadTheDocs_ theme.
 * Bitbucket pipeline configuration support.
@@ -110,5 +110,5 @@ You may want to tune some parameters after the project is generated.
 .. _Sphinx: http://sphinx-doc.org/
 .. _ReadTheDocs: https://readthedocs.io/
 .. _click: https://click.palletsprojects.com/
-.. _setuptools-scm:: https://github.com/pypa/setuptools_scm/
-.. _dynaconf:: https://www.dynaconf.com/
+.. _setuptools-scm: https://github.com/pypa/setuptools_scm/
+.. _dynaconf: https://www.dynaconf.com/
