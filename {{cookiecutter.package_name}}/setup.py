@@ -38,7 +38,7 @@ setup(
         "click",
         {%- endif %}
     ],
-    setup_requires=["setuptools>=45", "wheel", "setuptools_scm>=6.2"],
+    setup_requires=["setuptools>=45", "wheel", "setuptools-scm>=6.2"],
     use_scm_version={
         "write_to": "./src/{{ cookiecutter.package_name }}/_version.py",
         "version_scheme": lambda x: base_version,

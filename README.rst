@@ -10,13 +10,13 @@ Cookiecutter_ template for a python package.
 Features
 --------
 
-* Testing with pytest_ and tox_ (3.5, 3.6 and 3.7).
-* Code style validation with flake8_.
+* Python `3.9`.
+* Testing with pytest_.
 * Sphinx_ documentation with ReadTheDocs_ theme.
 * Bitbucket pipeline configuration support.
-* Project version management with bumpversion_.
+* Project version management with setuptools-scm_.
 * Command line interface using click_.
-* Application configurations using config-source_.
+* Application configurations using dynaconf_.
 
 Usage
 -----
@@ -100,8 +100,6 @@ You may want to tune some parameters after the project is generated.
 * **Bitbucket pipeline**/**travis**: Update or change docker image and
   ``script`` steps.
 
-* **Tox**: Update or change python versions.
-
 * **.gitignore**: Add more entries if required. Make sure you add to correct
   place. Consider use global ``.gitignore`` for system-specific files and local
   one only for project-specific files. This article can help to figure out:
@@ -109,10 +107,8 @@ You may want to tune some parameters after the project is generated.
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _pytest: https://docs.pytest.org/en/latest/
-.. _tox: http://testrun.org/tox/
 .. _Sphinx: http://sphinx-doc.org/
 .. _ReadTheDocs: https://readthedocs.io/
-.. _bumpversion: https://github.com/peritus/bumpversion
 .. _click: https://click.palletsprojects.com/
-.. _flake8: http://flake8.pycqa.org/en/latest/
-.. _config-source:: https://github.com/LudditeLabs/config-source
+.. _setuptools-scm:: https://github.com/pypa/setuptools_scm/
+.. _dynaconf:: https://www.dynaconf.com/
