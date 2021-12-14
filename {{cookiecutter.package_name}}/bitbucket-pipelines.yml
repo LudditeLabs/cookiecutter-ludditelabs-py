@@ -1,4 +1,5 @@
-image: ludditelabs/pyenv-multipy:20190107
+{% if cookiecutter.use_conda == 'y' -%}
+image: continuumio/miniconda3:4.9.2
 
 pipelines:
   default:
@@ -6,7 +7,19 @@ pipelines:
         caches:
           - pip
         script:
-          - pyenv global 3.6.6 3.5.6 3.7.0
-          - pip install -U pip
+          - conda env create -n {{ cookiecutter.package_name }} --file requirements/test.yml
+          - conda activate {{ cookiecutter.package_name }}
+          - pip install src/{{ cookiecutter.package_name }}
+          - pytest -vvv --cov={{ cookiecutter.package_name }} tests
+{% else -%}
+image: python:3.9.7
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - pip
+        script:
           - pip install -r requirements/test.txt
-          - tox
+          - pytest -vvv --cov={{ cookiecutter.package_name }} tests
+{% endif -%}

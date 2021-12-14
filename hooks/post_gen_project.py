@@ -58,15 +58,18 @@ if __name__ == '__main__':
         paths.add_from_package('cli.py')
         paths.add_from_package('__main__.py')
 
-    if '{{ cookiecutter.use_logging }}' != 'y':
-        paths.add_from_package('utils', 'logging.py')
-
-    if '{{ cookiecutter.use_appconfig }}' != 'y':
-        paths.add_from_package('utils', 'config.py')
-        paths.add_from_package('appconfig.py')
-
     if '{{ cookiecutter.license }}' == 'No license':
         paths.add_from_root('LICENSE')
 
+    if '{{ cookiecutter.use_conda }}' == 'y':
+        paths.add_from_root('requirements', 'app.txt')
+        paths.add_from_root('requirements', 'app-dev.txt')
+        paths.add_from_root('requirements', 'base.txt')
+        paths.add_from_root('requirements', 'dev.txt')
+        paths.add_from_root('requirements', 'test.txt')
+    else:
+        paths.add_from_root('requirements', 'production.yml')
+        paths.add_from_root('requirements', 'dev.yml')
+        paths.add_from_root('requirements', 'test.yml')
+
     paths.remove()
-    paths.remove_empty_package('utils')

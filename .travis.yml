@@ -4,4 +4,4 @@ python:
 script:
   - pip install -U pip
   - pip install -r requirements.txt
-  - py.test -vv tests
+  - pytest -vv tests

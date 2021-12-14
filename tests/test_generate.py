@@ -1,9 +1,10 @@
 import pytest
-from contextlib import contextmanager
 import datetime
 import os
+import re
 import shlex
 import subprocess
+from contextlib import contextmanager
 from cookiecutter.utils import rmtree
 
 # TODO: add tests for project_title, project_short_description, package_name,
@@ -68,7 +69,7 @@ def test_package_dir(cookies):
 # Test: check if generated test is correct.
 def test_run_tests(cookies):
     with project(cookies) as result:
-        assert run_command('py.test tests', str(result.project)) == 0
+        assert run_command('pytest tests', str(result.project)) == 0
 
 
 # Test: check if docs can be generated.
@@ -127,60 +128,36 @@ def test_use_cli(cookies, use):
         assert path.exists() is state
 
 
-# Test: use_logging flag.
-@pytest.mark.parametrize('use', ['y', 'n'])
-def test_use_logging(cookies, use):
-    ctx = dict(use_logging=use, package_name='mypkg')
-    state = use == 'y'
+# Test: use_cli flag, setup CLI support.
+@pytest.mark.parametrize(
+    'use,paths',
+    (
+        (
+            'y',
+            [
+                'production.yml',
+                'dev.yml',
+                'test.yml',
+            ],
+        ),
+        (
+            'n',
+            [
+                'app.txt',
+                'app-dev.txt',
+                'base.txt',
+                'dev.txt',
+                'test.txt',
+            ]
+        ),
+    )
+)
+def test_use_conda(cookies, use, paths):
+    ctx = dict(use_conda=use, package_name='mypkg')
 
     with project(cookies, extra_context=ctx) as result:
-        path = result.project.join('src', 'mypkg', 'utils', 'logging.py')
-        assert path.exists() is state
-
-
-# Test: use_appconfig flag.
-@pytest.mark.parametrize('use', ['y', 'n'])
-def test_use_appconfig(cookies, use):
-    ctx = dict(use_appconfig=use, package_name='mypkg')
-    state = use == 'y'
-
-    with project(cookies, extra_context=ctx) as result:
-        path = result.project.join('setup.py')
-        assert ("'config-source'" in path.read()) is state
-
-        path = result.project.join('src', 'mypkg', 'cli.py')
-        src = path.read()
-        assert ("from mypkg import appconfig" in src) is state
-        assert ("ctx.meta['config'] = appconfig.load(config)" in src) is state
-        assert ("def cli(ctx, config)" in src) is state
-
-        path = result.project.join('src', 'mypkg', 'utils', 'config.py')
-        assert path.exists() is state
-
-        path = result.project.join('src', 'mypkg', 'appconfig.py')
-        assert path.exists() is state
-
-        path = result.project.join('requirements', 'base.txt')
-        assert ('config-source=' in path.read()) is state
-
-
-# Test: use_appconfig_s3 flag.
-@pytest.mark.parametrize('use,use_s3', [
-    ('y', 'y'),
-    ('y', 'n'),
-    ('n', 'n'),
-    ('n', 'y')
-])
-def test_use_appconfig_s3(cookies, use, use_s3):
-    ctx = dict(use_appconfig=use, use_appconfig_s3=use_s3, package_name='mypkg')
-    state_s3 = use == 'y' and use_s3 == 'y'
-
-    with project(cookies, extra_context=ctx) as result:
-        path = result.project.join('setup.py')
-        assert ("'config-source-s3'" in path.read()) is state_s3
-
-        path = result.project.join('requirements', 'base.txt')
-        assert ('config-source-s3=' in path.read()) is state_s3
+        actual = sorted(str(x) for x in os.listdir(result.project.join('requirements')))
+        assert sorted(paths) == actual
 
 
 # Test: LICENSE file generating.
@@ -209,6 +186,25 @@ class TestLicense:
             path = result.project.join('LICENSE')
             now = datetime.datetime.now()
             assert 'Copyright (c) %d' % now.year in path.read()
+
+    # Test: is file exists after generating.
+    @pytest.mark.parametrize('license, text', [
+        ('No license', ''),
+        (
+            'Apache Software License 2.0',
+            '"License :: OSI Approved :: Apache Software License",'
+        ),
+        ('MIT license', '"License :: OSI Approved :: MIT License",'),
+        ('BSD license', '"License :: OSI Approved :: BSD License",')
+    ])
+    def test_setup(self, cookies, license, text):
+        pattern = f'"Programming Language :: Python :: 3",\n\s+{text}\n\s+]'
+        ctx = dict(license=license)
+        with project(cookies, extra_context=ctx) as result:
+            path = result.project.join('setup.py')
+            content = path.read()
+            m = re.search(pattern, content)
+            assert m is not None
 
 
 # Test: set project URL.

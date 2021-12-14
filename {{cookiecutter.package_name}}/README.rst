@@ -29,6 +29,20 @@ https://blog.ionelmc.ro/2014/05/25/python-packaging/.
 Installation
 ------------
 
+{% if cookiecutter %}
+Create conda environment and install ``{{ cookiecutter.package_name }}`` there. You can use production and
+development environments::
+
+    # Create development environment.
+    $ conda env create -n {{ cookiecutter.package_name }} --file requirements/development.yml
+
+    # Or create production environment.
+    $ conda env create -n {{ cookiecutter.package_name }} --file requirements/production.yml
+
+    $ conda activate {{ cookiecutter.package_name }}
+    $ pip install -e src/{{ cookiecutter.package_name }}
+
+{% else %}
 Project installation is performing with requirements files::
 
     $ pip install -r requirements/<name>.txt
@@ -62,13 +76,12 @@ environment::
     $ python3 -m venv /path/to/venv
     $ source /path/to/venv/bin/activate
     $ pip install -r requirements/app.txt
+{% endif %}
 
 {% if cookiecutter.use_cli == 'y' -%}
 After installation you can run commands with::
 
     $ {{ cookiecutter.package_name }} <commands> ...
-
-    # For more info see:
     $ {{ cookiecutter.package_name }} --help
 
 {% endif -%}
@@ -92,14 +105,14 @@ directory.
 Code Style
 ----------
 
-This project is developing using
-`PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ style and ``flake8`` to
-check various issues in the sources like incorrect formatting and too complex
-functions. ``flake8`` is integrated to ``tox`` but you could run it separately
-or embed to your IDE. Use the following command to check source code before
-committing changes::
+This project is developing using `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_
+style with help of `black <https://github.com/psf/black>`_ and
+`isort <https://github.com/PyCQA/isort>`_.
 
-    $ flake8 src tests
+Use the following command to check source code before committing changes::
+
+    $ isort src tests
+    $ black src tests
 
 Git commit messages follows these guidelines:
 https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53.
@@ -110,35 +123,17 @@ Tests
 Tests are located in the ``tests/`` directory and implemented with
 `PyTests <pytest.org>`_ framework.
 
-You could run specific tests with ``py.test`` or all tests in different
+You could run specific tests with ``pytest`` or all tests in different
 enviroments with ``tox``::
 
     # Run all tests.
-    $ py.test tests
+    $ pytest tests
 
     # Run single test case.
-    $ py.test tests/test_<name>.py
+    $ pytest tests/test_<name>.py
 
     # Run tests with coverage report.
-    $ py.test --cov={{ cookiecutter.package_name }} ...
+    $ pytest --cov={{ cookiecutter.package_name }} ...
 
     # Run all tests with tox.
     $ tox
-
-Version updating
-----------------
-
-Version is managed by `bumpversion <https://github.com/peritus/bumpversion>`_
-tool.
-
-If you need to increase ``{{ cookiecutter.package_name }}`` version then run::
-
-    # Increase 'patch' part: 0.0.1 -> 0.0.2
-    $ bumpversion patch
-
-    # Increase 'minor' part: 0.0.1 -> 0.1.0
-    $ bumpversion minor
-
-    # Increase 'major' part: 0.0.1 -> 1.0.0
-    $ bumpversion major
-

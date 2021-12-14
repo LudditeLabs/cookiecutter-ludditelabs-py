@@ -1,0 +1,3 @@
+# See setuptools docs.
+# graft src/{{ cookiecutter.package_name }}/dir
+# include src/{{ cookiecutter.package_name }}/filename.ext
