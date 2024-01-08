@@ -7,12 +7,14 @@ import subprocess
 from contextlib import contextmanager
 from cookiecutter.utils import rmtree
 
-# TODO: add tests for project_title, project_short_description, package_name,
+
+# TODO: add tests for project_title, project_short_description, project_slug,
 #       author, email, version.
 
 # TODO: test CLI running.
 
 # -- Utils --------------------------------------------------------------------
+
 
 @contextmanager
 def cwd(path):
@@ -54,165 +56,154 @@ def run_command(command, path):
         Exit status of the command.
     """
     with cwd(path):
-        return subprocess.check_call(shlex.split(command))
+        return subprocess.check_call(shlex.split(command), shell=True)
 
 
 # -- Tests --------------------------------------------------------------------
 
+
 # Test: check if package dir exists.
 def test_package_dir(cookies):
     with project(cookies) as result:
-        path = result.project.join('src', result.project.basename)
+        path = result.project.join("src", result.project.basename)
         assert path.exists()
 
 
 # Test: check if generated test is correct.
 def test_run_tests(cookies):
     with project(cookies) as result:
-        assert run_command('pytest tests', str(result.project)) == 0
+        env = os.environ.copy()
+        env["POETRY_VIRTUALENVS_IN_PROJECT"] = "1"
+        res = subprocess.run(
+            ["poetry", "install", "--with", "test"],
+            env=env,
+            cwd=result.project,
+            capture_output=True,
+        )
+        assert res.returncode == 0, res.stderr
+
+        res = subprocess.run(
+            ["poetry", "run", "pytest", "tests"],
+            env=env,
+            cwd=result.project,
+            capture_output=True,
+        )
+        assert res.returncode == 0, res.stderr
 
 
 # Test: check if docs can be generated.
 def test_run_docs(cookies):
     with project(cookies) as result:
-        assert run_command('make html', str(result.project.join('docs'))) == 0
+        env = os.environ.copy()
+        env["POETRY_VIRTUALENVS_IN_PROJECT"] = "1"
+        res = subprocess.run(
+            ["poetry", "install", "--with", "dev"],
+            env=env,
+            cwd=result.project,
+            capture_output=True,
+        )
+        assert res.returncode == 0, res.stderr
+
+        res = subprocess.run(
+            ["poetry", "run", "make", "html"],
+            env=env,
+            cwd=result.project / "docs",
+            capture_output=True,
+        )
+        assert res.returncode == 0, res.stderr
 
 
-# Test: use_bitbucket_pipelines flag (create or not bitbucket-pipelines.yml).
-@pytest.mark.parametrize('use', ['y', 'n'])
-def test_use_bitbucket_pipelines(cookies, use):
-    ctx = dict(use_bitbucket_pipelines=use)
+# Test: with_bitbucket_pipelines flag (create or not bitbucket-pipelines.yml).
+@pytest.mark.parametrize("use", ["y", "n"])
+def test_with_bitbucket_pipelines(cookies, use):
+    ctx = dict(with_bitbucket_pipelines=use)
     with project(cookies, extra_context=ctx) as result:
-        path = result.project.join('bitbucket-pipelines.yml')
-        assert path.exists() is (use == 'y')
+        path = result.project / "bitbucket-pipelines.yml"
+        assert path.exists() is (use == "y")
 
 
-# Test: use_travis flag (create or not .travis.yml).
-@pytest.mark.parametrize('use', ['y', 'n'])
-def test_use_travis(cookies, use):
-    ctx = dict(use_travis=use)
-    with project(cookies, extra_context=ctx) as result:
-        path = result.project.join('.travis.yml')
-        assert path.exists() is (use == 'y')
-
-
-# Test: sphinx_use_apidoc flag, configure or not apidoc.
-@pytest.mark.parametrize('use', ['y', 'n'])
-def test_sphinx_use_apidoc(cookies, use):
-    ctx = dict(sphinx_use_apidoc=use)
-    state = use == 'y'
-
-    with project(cookies, extra_context=ctx) as result:
-        path = result.project.join('docs', 'conf.py')
-        assert (("app.connect('builder-inited', run_apidoc)" in path.read())
-                is state)
-
-        path = result.project.join('docs', 'index.rst')
-        assert ("_apidoc/modules" in path.read()) is state
-
-
-# Test: use_cli flag, setup CLI support.
-@pytest.mark.parametrize('use', ['y', 'n'])
-def test_use_cli(cookies, use):
-    ctx = dict(use_cli=use, package_name='mypkg')
-    state = use == 'y'
+# Test: with_cli flag, setup CLI support.
+@pytest.mark.parametrize("use", ["y", "n"])
+def test_with_cli(cookies, use):
+    ctx = dict(with_cli=use, project_slug="my_pkg")
+    state = use == "y"
 
     with project(cookies, extra_context=ctx) as result:
-        path = result.project.join('setup.py')
-        assert ('entry_points' in path.read()) is state
+        filename = result.project / "pyproject.toml"
+        content = filename.read()
 
-        path = result.project.join('src', 'mypkg', '__main__.py')
-        assert path.exists() is state
+        assert ("my-pkg = 'my_pkg.__main__:run'" in content) is state
+        assert ('click = "^8.1.3"' in content) is state
 
-        path = result.project.join('src', 'mypkg', 'cli.py')
-        assert path.exists() is state
+        filename = result.project / "src" / "my_pkg" / "__main__.py"
+        assert filename.exists() is state
 
-
-# Test: use_cli flag, setup CLI support.
-@pytest.mark.parametrize(
-    'use,paths',
-    (
-        (
-            'y',
-            [
-                'production.yml',
-                'dev.yml',
-                'test.yml',
-            ],
-        ),
-        (
-            'n',
-            [
-                'app.txt',
-                'app-dev.txt',
-                'base.txt',
-                'dev.txt',
-                'test.txt',
-            ]
-        ),
-    )
-)
-def test_use_conda(cookies, use, paths):
-    ctx = dict(use_conda=use, package_name='mypkg')
-
-    with project(cookies, extra_context=ctx) as result:
-        actual = sorted(str(x) for x in os.listdir(result.project.join('requirements')))
-        assert sorted(paths) == actual
+        filename = result.project / "src" / "my_pkg" / "cli.py"
+        assert filename.exists() is state
 
 
 # Test: LICENSE file generating.
 class TestLicense:
     # Test: is file exists after generating.
-    @pytest.mark.parametrize('license, state', [
-        ('No license', False),
-        ('Apache Software License 2.0', True),
-        ('MIT license', True),
-        ('BSD license', True)
-    ])
+    @pytest.mark.parametrize(
+        "license, state",
+        [
+            ("No license", False),
+            ("Apache Software License 2.0", True),
+            ("MIT license", True),
+            ("BSD license", True),
+        ],
+    )
     def test_generated(self, cookies, license, state):
         ctx = dict(license=license)
         with project(cookies, extra_context=ctx) as result:
-            path = result.project.join('LICENSE')
+            path = result.project / "LICENSE"
             assert path.exists() is state
 
     # Test: check year in the license file.
-    @pytest.mark.parametrize('license', [
-        'Apache Software License 2.0',
-        'MIT license',
-        'BSD license'
-    ])
+    @pytest.mark.parametrize(
+        "license", ["Apache Software License 2.0", "MIT license", "BSD license"]
+    )
     def test_year(self, cookies, license):
         with project(cookies, extra_context=dict(license=license)) as result:
-            path = result.project.join('LICENSE')
+            content = (result.project / "LICENSE").read()
             now = datetime.datetime.now()
-            assert 'Copyright (c) %d' % now.year in path.read()
+            assert "Copyright (c) %d" % now.year in content
 
-    # Test: is file exists after generating.
-    @pytest.mark.parametrize('license, text', [
-        ('No license', ''),
-        (
-            'Apache Software License 2.0',
-            '"License :: OSI Approved :: Apache Software License",'
-        ),
-        ('MIT license', '"License :: OSI Approved :: MIT License",'),
-        ('BSD license', '"License :: OSI Approved :: BSD License",')
-    ])
-    def test_setup(self, cookies, license, text):
-        pattern = f'"Programming Language :: Python :: 3",\n\s+{text}\n\s+]'
+    # Test: License in classifiers.
+    @pytest.mark.parametrize(
+        "license, text",
+        [
+            ("No license", ""),
+            (
+                "Apache Software License 2.0",
+                "License :: OSI Approved :: Apache Software License",
+            ),
+            ("MIT license", "License :: OSI Approved :: MIT License"),
+            ("BSD license", "License :: OSI Approved :: BSD License"),
+        ],
+    )
+    def test_classifiers(self, cookies, license, text):
+        postfix = "Programming Language :: Python :: 3"
+
+        if text:
+            pattern = rf'classifiers=\[\n\s+"{text}",\n\s+"{postfix}"'
+        else:
+            pattern = rf'classifiers=\[\n\s+"{postfix}"'
+
         ctx = dict(license=license)
         with project(cookies, extra_context=ctx) as result:
-            path = result.project.join('setup.py')
-            content = path.read()
+            content = (result.project / "pyproject.toml").read()
             m = re.search(pattern, content)
             assert m is not None
 
 
 # Test: set project URL.
-@pytest.mark.parametrize('url', ['', 'http://example.com'])
+@pytest.mark.parametrize("url", ["", "http://example.com"])
 def test_url(cookies, url):
     ctx = dict(project_url=url)
     state = len(url) != 0
 
     with project(cookies, extra_context=ctx) as result:
-        path = result.project.join('setup.py')
-        assert ('url=' in path.read()) is state
+        content = (result.project / "pyproject.toml").read()
+        assert ("homepage =" in content) is state

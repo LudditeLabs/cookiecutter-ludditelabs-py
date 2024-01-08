@@ -1,0 +1,8 @@
+[run]
+source = src/{{ cookiecutter.project_slug }}
+branch = true
+omit = tests/*
+
+[report]
+show_missing = true
+skip_covered = true

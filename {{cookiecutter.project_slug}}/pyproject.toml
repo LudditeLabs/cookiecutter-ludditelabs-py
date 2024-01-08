@@ -1,0 +1,78 @@
+[tool.poetry]
+name = "{{ cookiecutter.project_slug }}"
+version = "{{ cookiecutter.version }}"
+description = "{{ cookiecutter.project_short_description }}"
+authors = ["{{ cookiecutter.author | replace('\"', '\\\"') }} <{{ cookiecutter.email }}>"]
+{% if cookiecutter.project_url -%}
+homepage = "{{ cookiecutter.project_url }}"
+{% endif -%}
+readme = "README.md"
+
+classifiers=[
+    {% if cookiecutter.license == 'MIT license' -%}
+    "License :: OSI Approved :: MIT License",
+    {% elif cookiecutter.license == 'BSD license' -%}
+    "License :: OSI Approved :: BSD License",
+    {% elif cookiecutter.license == 'Apache Software License 2.0' -%}
+    "License :: OSI Approved :: Apache Software License",
+    {% endif -%}
+    "Programming Language :: Python :: 3"
+]
+
+{% if cookiecutter.with_cli == "y" -%}
+[tool.poetry.scripts]
+{{ cookiecutter.project_slug | replace('_', '-') }} = '{{ cookiecutter.project_slug }}.__main__:run'
+{%- endif %}
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4"
+python-dotenv = "^1.0.0"
+pydantic = "^1"
+{%- if cookiecutter.with_cli == "y" %}
+click = "^8.1.3"
+{%- endif %}
+
+
+[tool.poetry.group.lint]
+optional = true
+
+[tool.poetry.group.lint.dependencies]
+black = "^23.3.0"
+ruff = "^0.0.275"
+
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+pytest-datadir-ng = "^1.1.1"
+
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.6.0"
+{% if cookiecutter.with_docs == "y" -%}
+sphinx = "^7.2.6"
+sphinx-rtd-theme = "^2.0.0"
+{%- endif %}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+select = [
+  "E",  # pycodestyle
+  "F",  # pyflakes
+  "I",  # isort
+]
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+]

@@ -1,0 +1,39 @@
+image: python:3.10
+
+definitions:
+  caches:
+    venv:
+      key:
+        files:
+          - poetry.lock
+      path: .venv
+
+pipelines:
+  default:
+    - step:
+        name: Setup
+        caches:
+          - pip
+        script:
+          - python3 -m pip install --user pipx==1.1.0
+          - python3 -m pipx install poetry==1.5.1
+
+    - step:
+        name: Linting
+        caches:
+          - pip
+        script:
+          - export PATH="$HOME/.local/bin:$PATH"
+          - poetry install --only lint
+          - poetry run ruff .
+          - poetry run black --check .
+
+    - step:
+        name: Tests
+        caches:
+          - pip
+          - venv
+        script:
+          - export PATH="$HOME/.local/bin:$PATH" POETRY_VIRTUALENVS_OPTIONS_ALWAYS_COPY=1 POETRY_VIRTUALENVS_IN_PROJECT=1
+          - poetry install --with test
+          - poetry run pytest -vvv --cov={{ cookiecutter.project_slug }} --junitxml=./test-reports/junit.xml tests
