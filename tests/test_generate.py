@@ -97,7 +97,7 @@ def test_run_docs(cookies):
         env = os.environ.copy()
         env["POETRY_VIRTUALENVS_IN_PROJECT"] = "1"
         res = subprocess.run(
-            ["poetry", "install", "--with", "dev"],
+            ["poetry", "install", "--with", "doc"],
             env=env,
             cwd=result.project,
             capture_output=True,

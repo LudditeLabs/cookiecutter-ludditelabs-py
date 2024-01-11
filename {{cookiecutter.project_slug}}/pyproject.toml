@@ -37,8 +37,7 @@ click = "^8.1.3"
 optional = true
 
 [tool.poetry.group.lint.dependencies]
-black = "^23.3.0"
-ruff = "^0.0.275"
+ruff = "^0.1.11"
 
 
 [tool.poetry.group.test]
@@ -50,15 +49,21 @@ pytest-cov = "^4.1.0"
 pytest-datadir-ng = "^1.1.1"
 
 
+{% if cookiecutter.with_docs == "y" -%}
+[tool.poetry.group.doc]
+optional = true
+
+[tool.poetry.group.doc.dependencies]
+sphinx = "^7.2.6"
+sphinx-rtd-theme = "^2.0.0"
+{%- endif %}
+
+
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.6.0"
-{% if cookiecutter.with_docs == "y" -%}
-sphinx = "^7.2.6"
-sphinx-rtd-theme = "^2.0.0"
-{%- endif %}
 
 
 [build-system]
@@ -72,7 +77,16 @@ select = [
   "I",  # isort
 ]
 
+
 [tool.coverage.run]
 omit = [
     "tests/*",
 ]
+source = [
+    "src/{{ cookiecutter.project_slug }}",
+]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true

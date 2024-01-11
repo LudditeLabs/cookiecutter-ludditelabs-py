@@ -115,14 +115,12 @@ $ pre-commit install
 ### Code Style
 
 This project is developed using [PEP8](https://www.python.org/dev/peps/pep-0008/)
-style with the help of [black](https://github.com/psf/black) and
-[ruff](https://github.com/charliermarsh/ruff).
+style with the help of [ruff](https://github.com/charliermarsh/ruff).
 
 If you don't use `pre-commit`, use the following command to check source code before
 committing changes:
 ```shell
-$ ruff .
-$ black .
+$ ruff --fix .
 ```
 
 Git commit messages follow these guidelines:
@@ -136,6 +134,7 @@ The project has several packages groups (dependencies groups):
 * `dev` - packages required for development.
 * `test` - packages required for testing.
 * `lint` - packages required for development.
+* `doc` - packages required for documentation building.
 
 Add packages to the project:
 ```shell

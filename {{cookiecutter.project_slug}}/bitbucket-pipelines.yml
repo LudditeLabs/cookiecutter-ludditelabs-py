@@ -25,8 +25,7 @@ pipelines:
         script:
           - export PATH="$HOME/.local/bin:$PATH"
           - poetry install --only lint
-          - poetry run ruff .
-          - poetry run black --check .
+          - poetry run ruff check .
 
     - step:
         name: Tests
