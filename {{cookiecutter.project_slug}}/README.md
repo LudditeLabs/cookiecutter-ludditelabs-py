@@ -120,7 +120,8 @@ style with the help of [ruff](https://github.com/charliermarsh/ruff).
 If you don't use `pre-commit`, use the following command to check source code before
 committing changes:
 ```shell
-$ ruff --fix .
+$ ruff check --fix .
+$ ruff format .
 ```
 
 Git commit messages follow these guidelines:
