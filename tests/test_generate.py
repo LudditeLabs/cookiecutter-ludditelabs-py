@@ -114,32 +114,31 @@ def test_run_docs(cookies):
 
 
 # Test: with_bitbucket_pipelines flag (create or not bitbucket-pipelines.yml).
-@pytest.mark.parametrize("use", ["y", "n"])
+@pytest.mark.parametrize("use", [True, False])
 def test_with_bitbucket_pipelines(cookies, use):
     ctx = dict(with_bitbucket_pipelines=use)
     with project(cookies, extra_context=ctx) as result:
         path = result.project / "bitbucket-pipelines.yml"
-        assert path.exists() is (use == "y")
+        assert path.exists() is use
 
 
 # Test: with_cli flag, setup CLI support.
-@pytest.mark.parametrize("use", ["y", "n"])
+@pytest.mark.parametrize("use", [True, False])
 def test_with_cli(cookies, use):
     ctx = dict(with_cli=use, project_slug="my_pkg")
-    state = use == "y"
 
     with project(cookies, extra_context=ctx) as result:
         filename = result.project / "pyproject.toml"
         content = filename.read()
 
-        assert ("my-pkg = 'my_pkg.__main__:run'" in content) is state
-        assert ('click = "^8.1.3"' in content) is state
+        assert ("my-pkg = 'my_pkg.__main__:run'" in content) is use
+        assert ('click = "^8.1.3"' in content) is use
 
         filename = result.project / "src" / "my_pkg" / "__main__.py"
-        assert filename.exists() is state
+        assert filename.exists() is use
 
         filename = result.project / "src" / "my_pkg" / "cli.py"
-        assert filename.exists() is state
+        assert filename.exists() is use
 
 
 # Test: LICENSE file generating.

@@ -1,14 +1,14 @@
-# ruff: noqa: F821
+# ruff: noqa: F821, E402
 import os
 
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=os.environ.get("{{ cookiecutter.project_slug | upper }}_ENV_FILE"))
 
-import logging  # noqa: E402
-import logging.config  # noqa: E402
+import logging
+import logging.config
 
-from {{ cookiecutter.project_slug }}.cli import cli
+from {{ cookiecutter.project_slug }}.cli import {{ "cli_with_history" if cookiecutter.with_cli_history else "cli" }}
 
 COMMON_CONFIG = {
     "version": 1,
@@ -35,7 +35,7 @@ COMMON_CONFIG = {
 
 def run():
     logging.config.dictConfig(COMMON_CONFIG)
-    cli()
+    {{ "cli_with_history" if cookiecutter.with_cli_history else "cli" }}()
 
 
 if __name__ == "__main__":

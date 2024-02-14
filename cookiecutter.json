@@ -7,8 +7,9 @@
   "email": "dev@ludditelabs.io",
   "version": "0.0.1",
   "license": ["No license", "Apache Software License 2.0", "MIT license", "BSD license"],
-  "with_bitbucket_pipelines": "y",
-  "with_docs": "y",
-  "with_cli": "y",
+  "with_bitbucket_pipelines": true,
+  "with_docs": true,
+  "with_cli": true,
+  "with_cli_history": true,
   "settings_env_prefix": "{{ cookiecutter.project_slug | upper }}"
 }
