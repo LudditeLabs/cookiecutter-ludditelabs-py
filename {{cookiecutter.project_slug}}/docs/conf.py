@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# ruff: noqa: F821, E402
 #
 # Configuration file for the Sphinx documentation builder.
 #
