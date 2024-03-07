@@ -32,6 +32,8 @@ If you want to run tests then run:
 $ poetry install --with test
 ```
 
+See also `Development notes` section.
+
 ### Poetry issues
 
 `poetry install` may fail with the `failed to unlock the collection` error.
@@ -127,9 +129,9 @@ $ ruff format .
 Git commit messages follow these guidelines:
 https://gist.github.com/robertpainsi/b632364184e70900af4ab688decf6f53.
 
-### Packages
+### Dependency groups
 
-The project has several packages groups (dependencies groups):
+The project has several dependency groups:
 
 * `main` - packages required to run the `{{ cookiecutter.project_slug }}`.
 * `dev` - packages required for development.
