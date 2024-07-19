@@ -1,14 +1,16 @@
 {%- if cookiecutter.with_cli and cookiecutter.with_cli_history %}
 from pathlib import Path
 
+from pydantic import field_validator
 {% endif -%}
-from pydantic import BaseSettings{% if cookiecutter.with_cli and cookiecutter.with_cli_history %}, validator{% endif %}
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    class Config:
-        env_prefix = "{{ cookiecutter.project_slug }}_"
-        env_nested_delimiter = "__"
+    model_config = SettingsConfigDict(
+        env_prefix="{{ cookiecutter.project_slug }}_",
+        env_nested_delimiter="__",
+    )
 
     {%- if cookiecutter.with_cli and cookiecutter.with_cli_history %}
 
@@ -26,7 +28,7 @@ class Settings(BaseSettings):
         :attr:`.CLI_HISTORY`.
     """
 
-    @validator("CLI_HISTORY_FILE", pre=True)
+    @field_validator("CLI_HISTORY_FILE", mode="before")
     def validate_cli_history_file(cls, v: Path) -> Path:
         return Path(v).expanduser().resolve()
     {%- endif %}
