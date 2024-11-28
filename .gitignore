@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.venv/
+.venv3/
+venv.bak/
+.idea/
+.vscode/
+
 # C extensions
 *.so
 
