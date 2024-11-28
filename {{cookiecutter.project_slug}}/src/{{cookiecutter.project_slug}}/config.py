@@ -8,7 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_prefix="{{ cookiecutter.project_slug }}_",
+        env_prefix="{{ cookiecutter.settings_env_prefix | lower }}_",
         env_nested_delimiter="__",
     )
 
