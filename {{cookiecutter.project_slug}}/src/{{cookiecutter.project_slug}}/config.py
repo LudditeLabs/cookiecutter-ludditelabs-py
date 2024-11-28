@@ -34,4 +34,4 @@ class Settings(BaseSettings):
     {%- endif %}
 
 
-{% if cookiecutter.with_cli %}settings = Settings(){% endif %}
+settings = Settings()
