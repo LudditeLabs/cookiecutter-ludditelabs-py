@@ -1,9 +1,9 @@
 # ruff: noqa: F821, E402
 import os
 
-from dotenv import load_dotenv
+from {{ cookiecutter.project_slug }}.config_loader import load_pkg_dotenv
 
-load_dotenv(dotenv_path=os.environ.get("{{ cookiecutter.project_slug | upper }}_ENV_FILE"))
+load_pkg_dotenv()
 
 import logging
 import logging.config
