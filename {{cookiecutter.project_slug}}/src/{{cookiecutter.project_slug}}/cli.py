@@ -51,3 +51,4 @@ def cli(verbose):
 # NOTE: mark with noqa at the end of import to skip linter checks here.
 #
 # import {{ cookiecutter.project_slug }}.pkg.cli  # noqa
+

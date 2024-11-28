@@ -168,3 +168,4 @@ $ pytest --cov={{ cookiecutter.project_slug }} ...
 ```
 
 See [pytest](https://docs.pytest.org/en/latest/) docs for more info.
+

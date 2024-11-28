@@ -14,3 +14,4 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "slow: marks a test as slow")
     config.addinivalue_line("markers", "integration: marks a test as integration")
     config.addinivalue_line("markers", "skip_in_ci: skip a test in CI")
+

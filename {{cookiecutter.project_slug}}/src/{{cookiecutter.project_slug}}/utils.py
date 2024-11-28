@@ -10,3 +10,4 @@ def get_process_cmd() -> str:  # pragma: no cover
         cmd.pop(0)
     cmd[0] = Path(cmd[0]).name
     return " ".join(cmd)
+
