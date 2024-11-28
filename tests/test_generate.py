@@ -39,6 +39,8 @@ def project(cookies, *args, **kwargs):
         cookie to be baked and its temporal files will be removed
     """
     result = cookies.bake(*args, **kwargs)
+    if result.exception is not None:
+        raise result.exception
     try:
         yield result
     finally:
